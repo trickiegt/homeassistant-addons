@@ -420,6 +420,8 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'addAction' || $_REQUE
               let time = dateParts[1];
               if (date)
                 document.querySelector('#valid_from_date').value = date;
+              else
+                document.querySelector('#valid_from_date').value = date;
               if (time)
                 document.querySelector('#valid_from_time').value = time;
             }
