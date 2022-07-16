@@ -135,7 +135,8 @@ class Actions {
                 && preg_match('/^([a-zA-Z0-9_-]+)$/', $_REQUEST['link']))
             return $_REQUEST['link'];
         else
-            throw new \Exception('No ID given!');
+            return $_REQUEST['link'];
+            #throw new \Exception('No ID given!');
     }
 
     protected function getAction()
