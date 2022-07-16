@@ -36,7 +36,7 @@ class Actions
         if (isset($_REQUEST['id']) && ctype_xdigit($_REQUEST['id']))
             return $_REQUEST['id'];
         elseif (isset($_REQUEST['id'])
-                && preg_match('/^([a-zA-Z0-9]+)$/', $_REQUEST['id']))
+                && preg_match('/^([a-zA-Z0-9-_]+)$/', $_REQUEST['id']))
             return $_REQUEST['id'];
         else
             throw new \Exception('No ID given!');
