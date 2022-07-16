@@ -364,7 +364,7 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'addAction' || $_REQUE
                    class="dateinput"
                    name="valid_from_date"
                    type="date"
-                   min="<?= date('Y-m-d',time())?>"
+                   min="<?= date("Y-m-d", strtotime("yesterday"))?>"
                    value="<?= date('Y-m-d',time())?>"
                    onchange="validateDates();(function(){
                        document.querySelector('#expiry_time_date').min = document.querySelector('#valid_from_date').value;
