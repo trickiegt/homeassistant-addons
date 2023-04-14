@@ -122,25 +122,36 @@ class Actions {
         $data           = json_encode($data);
         $serviceCall    = explode('.',$actionData->service_call);
 
-        $options = json_decode(file_get_contents('/data/options.json'));        
-        $this->token = $options->apiToken;
-        if ($this->token == "Optional")
+        $options = json_decode(file_get_contents('/data/options.json'));
+        if ($options->apiToken == "Optional")
         {
-            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
-            $token = $_SERVER['SUPERVISOR_TOKEN'];
-        }
-        
-        
-        $ch = curl_init(self::API_URL . 'services/' . $serviceCall[0]. '/'. $serviceCall[1]);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            $ch = curl_init(self::API_URL . 'services/' . $serviceCall[0]. '/'. $serviceCall[1]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$token}",
                            'Content-Type: application/json',
                            'Content-Length: ' . mb_strlen($data)
                        ]
         );
+        }
+        else
+        {
+            $token = $options->apiToken;
+            $apiUrl = "http://localhost:".$options->apiPort."/api/";
+            
+             $ch = curl_init($apiUrl . 'services/' . $serviceCall[0]. '/'. $serviceCall[1]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                           "Authorization: Bearer {$token}",
+                           'Content-Type: application/json',
+                           'Content-Length: ' . mb_strlen($data)
+                       ]
+        );            
+       
         curl_exec($ch);
 
         return $this;
