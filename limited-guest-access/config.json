@@ -9,7 +9,7 @@
   "options": {
     "activate_tls": false,
     "external_url": "https://URL:port/",
-    "apiToken":"LongLivedAccessToken"
+    "apiToken":"Optional"
   },
   "schema": {
     "activate_tls": "bool",
