@@ -151,7 +151,7 @@ class Actions {
                            'Content-Length: ' . mb_strlen($data)
                        ]
         );            
-       
+        }
         curl_exec($ch);
 
         return $this;
