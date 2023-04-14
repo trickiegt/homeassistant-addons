@@ -1,12 +1,12 @@
 <?php
 namespace TekniskSupport\LimitedGuestAccess\User;
-string $token = "";
 class Actions {
     const     DATA_DIR           = '/addons/limited-guest-access/data/links/';
     const     INJECT_DIR         = ['/addons/limited-guest-access/data/', '/share/limited-guest-access/'];
     const     API_URL            = 'http://supervisor/core/api/';
     public    bool $passwordProtected = false;
     public    bool $authenticated     = false;
+    public $token ="";
     protected object $linkData;
     protected ?object $data;
     public    ?string $theme = null;
@@ -130,6 +130,15 @@ class Actions {
         $data           = json_encode($data);
         $serviceCall    = explode('.',$actionData->service_call);
 
+        $options = json_decode(file_get_contents('/data/options.json'));        
+        $this->token = $options->apiToken;
+        if ($this->token == "Optional")
+        {
+            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+            $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+        
+        
         $ch = curl_init(self::API_URL . 'services/' . $serviceCall[0]. '/'. $serviceCall[1]);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -173,6 +182,15 @@ class Actions {
 
     public function getState(string $entityId): bool|string
     {
+        $options = json_decode(file_get_contents('/data/options.json'));        
+        $this->token = $options->apiToken;
+        if ($this->token == "Optional")
+        {
+            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+            $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+        
+        
         $ch = curl_init(self::API_URL . 'states/'. $entityId);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
