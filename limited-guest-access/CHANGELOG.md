@@ -1,3 +1,31 @@
+## [0.1.323] - 2023-04-14
+### Changes
+- Allow dashes in link urls
+- Set save directory to /share/limited-guest-access/data for share links (I Just want to see and modify code manually)
+
+## [0.1.28] - 2022-12-13
+### bugfix
+- Fixes "array key not found"
+
+## [0.1.27] - 2022-09-16
+### bugfix
+- Changing link no longer creates duplicate
+
+## [0.1.26] - 2022-09-16
+### feature
+- Added usage log
+- fixed bug in user view 
+
+## [0.1.25] - 2022-09-16
+### feature
+- Added friendly name to list of entities
+- methods and variables now have return types declared
+
+## [0.1.24] - 2022-08-25
+### bugfix
+- set timezone in admin ui
+- filter invalid charcters from custom URL
+
 ## [0.1.23] - 2021-06-23
 ### bugfix
 - Updated to php8
@@ -38,7 +66,7 @@
 ### Fixes
 - Fixed typos
 
-##[0.1.10] - 2020-09-10
+## [0.1.10] - 2020-09-10
 ### Added
 - Optional password to link
 - Custom link path
