@@ -5,12 +5,11 @@ class Actions {
     const     DATA_DIR           = '/data/links/';
     const     INJECT_DIR         = ['/data/', '/share/limited-guest-access/'];
     const     API_URL            = 'http://supervisor/core/api/';
-    public    $passwordProtected = false;
-    public    $authenticated     = false;
-    protected $linkData;
-    protected $data;
-    public    $actionName;
-    public    $theme;
+    public    bool $passwordProtected = false;
+    public    bool $authenticated     = false;
+    protected object $linkData;
+    protected ?object $data;
+    public    ?string $theme = null;
 
     public function __construct()
     {
@@ -30,7 +29,7 @@ class Actions {
             if (isset($this->data->linkData->password) && !empty($this->data->linkData->password)) {
                 $this->passwordProtected = true;
                 session_start();
-                if ($_SESSION['authenticated'] === true) {
+                if ($_SESSION['authenticated'] ?? false === true) {
                     $this->authenticated = true;
                 }
                 if (isset($_POST['password']) && password_verify($_POST['password'], $this->data->linkData->password)) {
@@ -49,18 +48,19 @@ class Actions {
 
             $this
                 ->performAction($actionData)
+                ->addLog($this->getAction())
                 ->invalidateAction($actionData, $this->getAction())
                 ->redirect('?performedAction='. urlencode($actionData->friendly_name));
         }
     }
 
-    public function getAllActions()
+    public function getAllActions(): object
     {
 
         return $this->data;
     }
 
-    public function getFilteredActions()
+    public function getFilteredActions(): object
     {
         $filteredActions = (object)[];
         $allActions = $this->getAllActions();
@@ -77,7 +77,7 @@ class Actions {
         return $filteredActions;
     }
 
-    protected function validateTime($actionData)
+    protected function validateTime(object $actionData): bool
     {
         $now        = time();
         $validFrom  = strtotime($actionData->valid_from);
@@ -95,7 +95,17 @@ class Actions {
         return true;
     }
 
-    protected function invalidateAction($actionData, $actionId)
+    protected function addLog(string $actionId): self
+    {
+        $time = new \DateTime();
+        $actions = $this->getAllActions();
+        $actions->$actionId->{'last_used'}[] = $time->format('U');
+        file_put_contents(self::DATA_DIR . $this->getLink() . '.json', json_encode($actions));
+
+        return $this;
+    }
+
+    protected function invalidateAction(object $actionData, string $actionId): self
     {
         if ($actionData->one_time_use) {
             $actions = (array)$this->getAllActions();
@@ -106,7 +116,7 @@ class Actions {
         return $this;
     }
 
-    protected function performAction($actionData)
+    protected function performAction(object $actionData): self
     {
         $data           = (object) array_filter((array) $actionData->service_call_data) ?? [];
         $data           = json_encode($data);
@@ -119,7 +129,7 @@ class Actions {
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}",
                            'Content-Type: application/json',
-                           'Content-Length: ' . strlen($data)
+                           'Content-Length: ' . mb_strlen($data)
                        ]
         );
         curl_exec($ch);
@@ -127,19 +137,18 @@ class Actions {
         return $this;
     }
 
-    protected function getLink()
+    protected function getLink(): string
     {
         if (isset($_REQUEST['link']) && ctype_xdigit($_REQUEST['link']))
             return $_REQUEST['link'];
         elseif (isset($_REQUEST['link'])
-                && preg_match('/^([a-zA-Z0-9_-]+)$/', $_REQUEST['link']))
+                && preg_match('/^([a-zA-Z0-9-_]+)$/', $_REQUEST['link']))
             return $_REQUEST['link'];
         else
-            return $_REQUEST['link'];
-            #throw new \Exception('No ID given!');
+            throw new \Exception('No ID given!');
     }
 
-    protected function getAction()
+    protected function getAction(): string
     {
         if (isset($_REQUEST['action']))
             return $_REQUEST['action'];
@@ -147,14 +156,14 @@ class Actions {
             throw new \Exception('No action given!');
     }
 
-    protected function redirect($path)
+    protected function redirect(string $path): self
     {
         header("Location: ". $path);
 
         return $this;
     }
 
-    public function getState($entityId)
+    public function getState(string $entityId): bool|string
     {
         $ch = curl_init(self::API_URL . 'states/'. $entityId);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -166,17 +175,18 @@ class Actions {
         return curl_exec($ch);
     }
 
-    public function inject($file)
+    public function inject($file): ?string
     {
         foreach (self::INJECT_DIR as $injectDirectory) {
             if (file_exists($injectDirectory . $file)) {
                 if (!preg_match('/^[\w.]+$/', $file)) {
-
-                    return;
+                    break;
                 }
 
                 return file_get_contents($injectDirectory . $file);
             }
         }
+
+        return null;
     }
 }
