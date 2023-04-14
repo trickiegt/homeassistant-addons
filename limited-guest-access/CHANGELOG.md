@@ -1,3 +1,7 @@
+## [0.1.36] - 2023-04-14
+### Changes
+Added options for own api key (requires port number for home assistant as well if using)
+
 ## [0.1.35] - 2023-04-14
 ### Changes
 - Allow dashes in link urls
