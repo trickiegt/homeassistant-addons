@@ -22,7 +22,8 @@
   "homeassistant_api": true,
   "map": [
     "ssl",
-    "share"
+    "share",
+    "var/www"
   ],
   "panel_icon": "mdi:card-account-details-outline"
 }
