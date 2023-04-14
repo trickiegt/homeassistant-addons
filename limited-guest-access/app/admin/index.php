@@ -336,7 +336,7 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'addAction' || $_REQUE
         ? '?action=editAction&id='. $_REQUEST['id'] .'&action_id=' . $_REQUEST['action_id']
         : '?action=addActionToLink&id='. $_REQUEST['id'];
     if ($_REQUEST['action'] == 'adjustAction') {
-        $data = json_decode(file_get_contents("/share/limited-guest-access/data/links/{$_REQUEST['id']}.json"));
+        $data = json_decode(file_get_contents("/addons/limited-guest-access/data/links/{$_REQUEST['id']}.json"));
     }
 ?>
     <fieldset>
@@ -470,7 +470,7 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'addAction' || $_REQUE
 <?php endif;
 foreach($actions->getAllLinks() as $link) :
     $link = str_replace([$actions::DATA_DIR,'.json'], '', $link);
-    $data = json_decode(file_get_contents("/share/limited-guest-access/data/links/{$link}.json"),false);
+    $data = json_decode(file_get_contents("/addons/limited-guest-access/data/links/{$link}.json"),false);
     unset($data->linkData);
 ?>
     <div class="row">
