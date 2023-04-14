@@ -1,13 +1,13 @@
 <?php
 
 namespace TekniskSupport\LimitedGuestAccess\Admin;
-string $token = "";
 class Actions
 {
 
     const API_URL  = 'http://supervisor/core/api/';
     const DATA_DIR = '/addons/limited-guest-access/data/links/';
     public $externalUrl;
+    public $token;
     protected array|bool|null $allLinks = null;
     protected bool $isDirty  = false;
 
@@ -20,8 +20,8 @@ class Actions
         $options = json_decode(file_get_contents('/data/options.json'));
         $this->externalUrl = $options->external_url;
         
-        $token = $options->apiToken;
-        if ($token == "Optional")
+        $this->token = $options->apiToken;
+        if ($this->token == "Optional")
         {
             //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
             $token = $_SERVER['SUPERVISOR_TOKEN'];
@@ -194,6 +194,14 @@ class Actions
 
     public function getServiceData(): string|bool
     {
+        $options = json_decode(file_get_contents('/data/options.json'));        
+        $this->token = $options->apiToken;
+        if ($this->token == "Optional")
+        {
+            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+            $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+        
         $ch = curl_init(self::API_URL . 'services');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -206,6 +214,14 @@ class Actions
 
     public function getStates(): string|bool
     {
+        $options = json_decode(file_get_contents('/data/options.json'));        
+        $this->token = $options->apiToken;
+        if ($this->token == "Optional")
+        {
+            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+            $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+        
         $ch = curl_init(self::API_URL . 'states');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
