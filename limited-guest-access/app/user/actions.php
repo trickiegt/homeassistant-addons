@@ -177,7 +177,7 @@ class Actions {
         $options = json_decode(file_get_contents('/data/options.json'));
         if ($options->apiToken == "Optional")
         {
-            $ch = curl_init(self::API_URL . 'services');
+            $ch = curl_init(self::API_URL . 'states/'. $entityId);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
@@ -191,7 +191,7 @@ class Actions {
             $apiUrl += $options->apiPort;
             $apiUrl += "/api/";
             
-            $ch = curl_init(self::$apiUrl . 'services');
+            $ch = curl_init(self::$apiUrl . 'states/'. $entityId);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$token}"
