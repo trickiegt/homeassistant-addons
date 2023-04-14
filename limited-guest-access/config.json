@@ -13,7 +13,8 @@
   },
   "schema": {
     "activate_tls": "bool",
-    "external_url": "str"
+    "external_url": "str",
+    "apiToken": "str"
   },
   "ports": {
     "8888/tcp": 8888,
