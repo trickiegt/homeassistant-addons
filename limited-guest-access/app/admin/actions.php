@@ -1,7 +1,7 @@
 <?php
 
 namespace TekniskSupport\LimitedGuestAccess\Admin;
-
+string $token = "";
 class Actions
 {
 
@@ -19,7 +19,15 @@ class Actions
         }
         $options = json_decode(file_get_contents('/data/options.json'));
         $this->externalUrl = $options->external_url;
-
+        
+        $token = $options->apiToken;
+        if ($token == "Optional")
+        {
+            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+            $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+    
+        
         $this->handleRequest();
         $this->getAllLinks();
     }
@@ -189,7 +197,7 @@ class Actions
         $ch = curl_init(self::API_URL . 'services');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                           "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+                           "Authorization: Bearer {$token}"
                        ]
         );
 
@@ -201,7 +209,7 @@ class Actions
         $ch = curl_init(self::API_URL . 'states');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                           "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+                           "Authorization: Bearer {$token}"
                        ]
         );
 
