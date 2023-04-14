@@ -1,4 +1,4 @@
-Updated 4-13-2023
+Updated 4-14-2023
 ### What is this?
 
 This add-on gives you the opportunity to give a guest user access
@@ -22,6 +22,8 @@ Within the valid time frame chosen when you created the action,
 your guest can access the external_link/name_of_link 
 (for example http://your-external-url.tld:8888/adf12345)
 to be able to trigger the actions using a button.
+-- These links are saved as json files and can be manually found/edited in /addons/limited-guest-access/data
+
 
 ### Inject code into user view
 
