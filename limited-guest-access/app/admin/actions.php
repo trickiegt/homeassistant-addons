@@ -19,15 +19,6 @@ class Actions
         }
         $options = json_decode(file_get_contents('/data/options.json'));
         $this->externalUrl = $options->external_url;
-        
-        $this->token = $options->apiToken;
-        if ($this->token == "Optional")
-        {
-            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
-            $token = $_SERVER['SUPERVISOR_TOKEN'];
-        }
-    
-        
         $this->handleRequest();
         $this->getAllLinks();
     }
@@ -194,14 +185,16 @@ class Actions
 
     public function getServiceData(): string|bool
     {
-        $options = json_decode(file_get_contents('/data/options.json'));        
-        $this->token = $options->apiToken;
-        if ($this->token == "Optional")
+        $options = json_decode(file_get_contents('/data/options.json'));
+        if ($options->apiToken == "Optional")
         {
             //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
             $token = $_SERVER['SUPERVISOR_TOKEN'];
         }
-        
+        else
+        {
+            $token = $options->apiToken;
+        }
         $ch = curl_init(self::API_URL . 'services');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -214,12 +207,15 @@ class Actions
 
     public function getStates(): string|bool
     {
-        $options = json_decode(file_get_contents('/data/options.json'));        
-        $this->token = $options->apiToken;
-        if ($this->token == "Optional")
+        $options = json_decode(file_get_contents('/data/options.json'));
+        if ($options->apiToken == "Optional")
         {
             //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
             $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+        else
+        {
+            $token = $options->apiToken;
         }
         
         $ch = curl_init(self::API_URL . 'states');
