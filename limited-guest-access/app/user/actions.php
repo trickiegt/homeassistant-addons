@@ -1,6 +1,6 @@
 <?php
 namespace TekniskSupport\LimitedGuestAccess\User;
-
+string $token = "";
 class Actions {
     const     DATA_DIR           = '/addons/limited-guest-access/data/links/';
     const     INJECT_DIR         = ['/addons/limited-guest-access/data/', '/share/limited-guest-access/'];
@@ -38,7 +38,15 @@ class Actions {
                 }
             }
         }
-
+        
+        $options = json_decode(file_get_contents('/data/options.json'));
+        $token = $options->apiToken;
+        if ($token == "Optional")
+        {
+            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+            $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+       
         if (isset($_GET['action'])) {
             $availableActions = $this->getFilteredActions();
             $actionData       = $availableActions->{$this->getAction()};
@@ -127,7 +135,7 @@ class Actions {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                           "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}",
+                           "Authorization: Bearer {$token}",
                            'Content-Type: application/json',
                            'Content-Length: ' . mb_strlen($data)
                        ]
@@ -168,7 +176,7 @@ class Actions {
         $ch = curl_init(self::API_URL . 'states/'. $entityId);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                           "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+                           "Authorization: Bearer {$token}"
                        ]
         );
 
