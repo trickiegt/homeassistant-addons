@@ -1,6 +1,6 @@
 {
   "name": "Limited guest access",
-  "version": "0.1.3513",
+  "version": "0.1.3514",
   "slug": "limited_guest_access",
   "description": "Allow guests to access limited functions",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
@@ -21,6 +21,7 @@
     "8899/tcp": 8899
   },
   "ingress": true,
+  "host_network": true,
   "homeassistant_api": true,
   "map": [
     "ssl",
