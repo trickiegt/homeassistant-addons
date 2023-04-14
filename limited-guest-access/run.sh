@@ -1,7 +1,6 @@
 #!/usr/bin/with-contenv bashio
 chmod 777 /data/
 chmod 644 /data/options.json
-mkdir -p /share/limited-guest-access/data
 is_ssl_active=$(cat /data/options.json |jq .activate_tls)
 if [ $is_ssl_active = true ]; then
     if test -f "/ssl/privkey.pem"; then
