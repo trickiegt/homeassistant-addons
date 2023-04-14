@@ -2,8 +2,8 @@
 namespace TekniskSupport\LimitedGuestAccess\User;
 
 class Actions {
-    const     DATA_DIR           = '/share/limited-guest-access/data/links/';
-    const     INJECT_DIR         = ['/share/limited-guest-access/data/', '/share/limited-guest-access/'];
+    const     DATA_DIR           = '/addons/limited-guest-access/data/links/';
+    const     INJECT_DIR         = ['/addons/limited-guest-access/data/', '/share/limited-guest-access/'];
     const     API_URL            = 'http://supervisor/core/api/';
     public    bool $passwordProtected = false;
     public    bool $authenticated     = false;
