@@ -232,7 +232,7 @@ class Actions
             $apiUrl += $options->apiPort;
             $apiUrl += "/api/";
             
-            $ch = curl_init(self::$apiUrl . 'services');
+            $ch = curl_init(self::$apiUrl . 'states');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$token}"
