@@ -40,7 +40,8 @@ RUN apk --update add \
         php-xmlreader \
         php-xmlwriter \
         php-zip \
-        curl
+        curl \
+        nano
 
 EXPOSE 8888
 EXPOSE 8899
@@ -53,6 +54,6 @@ COPY app/admin/ /var/www/admin/
 COPY app/user/ /var/www/user/
 RUN chmod a+x /run.sh
 RUN mkdir -p /run/nginx
-RUN mkdir -p /share/limited-guest-access
+RUN mkdir -p /share/limited-guest-access/data
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 CMD ["/run.sh"]
