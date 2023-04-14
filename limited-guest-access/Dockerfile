@@ -53,7 +53,6 @@ COPY app/admin/ /var/www/admin/
 COPY app/user/ /var/www/user/
 RUN chmod a+x /run.sh
 RUN mkdir -p /run/nginx
-RUN mkdir -p /share/limited-guest-access/data
+RUN mkdir -p /share/limited-guest-access
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
-RUN ln -sf /data /share/limited-guest-access/data
 CMD ["/run.sh"]
