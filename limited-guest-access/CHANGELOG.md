@@ -1,7 +1,7 @@
-## [0.1.323] - 2023-04-14
+## [0.1.35] - 2023-04-14
 ### Changes
 - Allow dashes in link urls
-- Set save directory to /share/limited-guest-access/data for share links (I Just want to see and modify code manually)
+- Save Link Config Files to /addons/limited-guest-access/data for share links (I Just want to see and modify code manually)
 
 ## [0.1.28] - 2022-12-13
 ### bugfix
