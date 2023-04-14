@@ -1,3 +1,5 @@
 {
-  "name": "TrickieGTz HA Addons"
+  "name": "Home Assistant add-on repository via TrickieGT",
+  "url": "https://github.com/trickiegt/homeassistant-addons",
+  "maintainer": "TrickieGT"
 }
