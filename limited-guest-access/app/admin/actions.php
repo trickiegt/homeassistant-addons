@@ -218,7 +218,7 @@ class Actions
          $options = json_decode(file_get_contents('/data/options.json'));
         if ($options->apiToken == "Optional")
         {
-            $ch = curl_init(self::API_URL . 'services');
+            $ch = curl_init(self::API_URL . 'states');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
