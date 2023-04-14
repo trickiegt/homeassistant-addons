@@ -179,6 +179,11 @@ $actions = new \TekniskSupport\LimitedGuestAccess\Admin\Actions();
         }
       }
 
+      function validateLink() {
+        let e  = document.querySelector('#linkPath');
+        e.value = e.value.replace(/[^a-z0-9-_]+/ig,'');
+      }
+
       let serviceData = <?= $actions->getServiceData() ?>;
       let states = <?= $actions->getStates() ?>;
       document.addEventListener('DOMContentLoaded', (event) => {
@@ -252,7 +257,11 @@ $actions = new \TekniskSupport\LimitedGuestAccess\Admin\Actions();
                   let option = document.createElement('option');
                   let newEntities = document.querySelector("#dynamic_field_entity_id");
                   option.value = state.entity_id;
-                  option.text = option.value;
+                  if (typeof state.attributes.friendly_name !== 'undefined') {
+                    option.text = state.attributes.friendly_name + ' (' + option.value + ')';
+                  } else{
+                    option.text = option.value;
+                  }
                   newEntities.appendChild(option);
                 }
               }
@@ -308,7 +317,8 @@ $actions = new \TekniskSupport\LimitedGuestAccess\Admin\Actions();
 <fieldset>
     <legend>Create advanced link</legend>
     <form action="?action=createNamedLink" method="post">
-        <input type="text" name="linkPath" placeholder="Optional custom path (valid chars 0-9A-z)" />
+        <input  onblur="validateLink();" onChange="validateLink()" id="linkPath" 
+                type="text" name="linkPath" placeholder="Optional custom path (valid chars 0-9A-z)" />
         <select name="theme">
             <option selected="selected" value="default">default - dark</option>
             <option value="light-grey">light - grey</option>
@@ -364,8 +374,8 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'addAction' || $_REQUE
                    class="dateinput"
                    name="valid_from_date"
                    type="date"
-                   min="<?= date("Y-m-d", strtotime("yesterday"))?>"
-                   value="<?= date("Y-m-d", strtotime("yesterday"))?>"
+                   min="<?= date('Y-m-d',time())?>"
+                   value="<?= date('Y-m-d',time())?>"
                    onchange="validateDates();(function(){
                        document.querySelector('#expiry_time_date').min = document.querySelector('#valid_from_date').value;
                    })()"
@@ -419,8 +429,6 @@ if (isset($_REQUEST['action']) && ($_REQUEST['action'] == 'addAction' || $_REQUE
               let date = dateParts[0];
               let time = dateParts[1];
               if (date)
-                document.querySelector('#valid_from_date').value = date;
-              else
                 document.querySelector('#valid_from_date').value = date;
               if (time)
                 document.querySelector('#valid_from_time').value = time;
@@ -503,7 +511,9 @@ foreach($actions->getAllLinks() as $link) :
             <ul>
                 <?php
                 if (!is_null($data)) {
-                    foreach($data as $action => $entry):?>
+                    foreach($data as $action => $entry):
+                    $lastUsed = $entry->last_used ?? [];
+                ?>
                         <li>
                             <a class="link noBorder" href="?action=removeAction&id=<?= $link ?>&action_id=<?= $action ?>">
                                 <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -515,7 +525,9 @@ foreach($actions->getAllLinks() as $link) :
                                     <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
                                 </svg>
                             </a>
-                            <?= $entry->friendly_name ?>
+                            <?= $entry->friendly_name ?><br/>
+                            <?= 'Times used: '. count($lastUsed); ?><br/>
+                            <?= 'last used: '. date('Y-m-d H:i:s', end($lastUsed)); ?>
                         </li>
                         <?php
                     endforeach;
