@@ -54,6 +54,5 @@ COPY app/admin/ /var/www/admin/
 COPY app/user/ /var/www/user/
 RUN chmod a+x /run.sh
 RUN mkdir -p /run/nginx
-RUN mkdir -p /share
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 CMD ["/run.sh"]
