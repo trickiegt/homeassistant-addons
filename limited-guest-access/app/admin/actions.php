@@ -188,42 +188,57 @@ class Actions
         $options = json_decode(file_get_contents('/data/options.json'));
         if ($options->apiToken == "Optional")
         {
-            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
-            $token = $_SERVER['SUPERVISOR_TOKEN'];
+            $ch = curl_init(self::API_URL . 'services');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                           "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+                       ]
+        );
         }
         else
         {
             $token = $options->apiToken;
-        }
-        $ch = curl_init(self::API_URL . 'services');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            $apiUrl = "http://localhost:";
+            $apiUrl += $options->apiPort;
+            $apiUrl += "/api/";
+            
+            $ch = curl_init(self::$apiUrl . 'services');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$token}"
                        ]
         );
-
+        }
+       
         return curl_exec($ch);
     }
 
     public function getStates(): string|bool
     {
-        $options = json_decode(file_get_contents('/data/options.json'));
+         $options = json_decode(file_get_contents('/data/options.json'));
         if ($options->apiToken == "Optional")
         {
-            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
-            $token = $_SERVER['SUPERVISOR_TOKEN'];
+            $ch = curl_init(self::API_URL . 'services');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                           "Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
+                       ]
+        );
         }
         else
         {
             $token = $options->apiToken;
-        }
-        
-        $ch = curl_init(self::API_URL . 'states');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            $apiUrl = "http://localhost:";
+            $apiUrl += $options->apiPort;
+            $apiUrl += "/api/";
+            
+            $ch = curl_init(self::$apiUrl . 'services');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$token}"
                        ]
         );
+        }
 
         return curl_exec($ch);
     }
