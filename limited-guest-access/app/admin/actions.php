@@ -6,7 +6,7 @@ class Actions
 {
 
     const API_URL  = 'http://supervisor/core/api/';
-    const DATA_DIR = '/share/limited-guest-access/data/links/';
+    const DATA_DIR = '/addons/limited-guest-access/data/links/';
     public $externalUrl;
     protected array|bool|null $allLinks = null;
     protected bool $isDirty  = false;
