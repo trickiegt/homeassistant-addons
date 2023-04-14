@@ -23,7 +23,7 @@
   "map": [
     "ssl",
     "share",
-    "var/www"
+    "var"
   ],
   "panel_icon": "mdi:card-account-details-outline"
 }
