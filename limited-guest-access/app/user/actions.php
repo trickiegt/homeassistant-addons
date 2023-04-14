@@ -187,11 +187,9 @@ class Actions {
         else
         {
             $token = $options->apiToken;
-            $apiUrl = "http://localhost:";
-            $apiUrl += $options->apiPort;
-            $apiUrl += "/api/";
+            $apiUrl = "http://localhost:".$options->apiPort."/api/";
             
-            $ch = curl_init(self::$apiUrl . 'states/'. $entityId);
+            $ch = curl_init($apiUrl . 'states/'. $entityId);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                            "Authorization: Bearer {$token}"
