@@ -39,14 +39,6 @@ class Actions {
             }
         }
         
-        $options = json_decode(file_get_contents('/data/options.json'));
-        $token = $options->apiToken;
-        if ($token == "Optional")
-        {
-            //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
-            $token = $_SERVER['SUPERVISOR_TOKEN'];
-        }
-       
         if (isset($_GET['action'])) {
             $availableActions = $this->getFilteredActions();
             $actionData       = $availableActions->{$this->getAction()};
@@ -182,12 +174,15 @@ class Actions {
 
     public function getState(string $entityId): bool|string
     {
-        $options = json_decode(file_get_contents('/data/options.json'));        
-        $this->token = $options->apiToken;
-        if ($this->token == "Optional")
+        $options = json_decode(file_get_contents('/data/options.json'));
+        if ($options->apiToken == "Optional")
         {
             //"Authorization: Bearer {$_SERVER['SUPERVISOR_TOKEN']}"
             $token = $_SERVER['SUPERVISOR_TOKEN'];
+        }
+        else
+        {
+            $token = $options->apiToken;
         }
         
         
